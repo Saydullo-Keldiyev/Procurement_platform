@@ -1,0 +1,6 @@
+@AgriProcurement.Supplier.API_HostAddress = http://localhost:5105
+
+GET {{AgriProcurement.Supplier.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
