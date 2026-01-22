@@ -107,8 +107,8 @@ jobs:
 
       - name: Build images for scan
         run: |
-          docker build -t procurement-api:${{ github.sha }} src/Modules/Procurement/AgriProcurement.Procurement.API
-          docker build -t supplier-api:${{ github.sha }} src/Modules/Supplier/AgriProcurement.Supplier.API
+          docker build -t procurement-api:${{ github.sha }} AgriProcurement.Procurement.API
+          docker build -t supplier-api:${{ github.sha }} AgriProcurement.Supplier.API
 
       - name: Trivy Scan (table)
         uses: aquasecurity/trivy-action@0.20.0
