@@ -4,13 +4,13 @@ using AgriProcurement.Procurement.API.RateLimiting;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.SwaggerUI;
-using Serilog;
-
 using OpenTelemetry;
+using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
-using OpenTelemetry.Metrics;
+using Prometheus;
+using Serilog;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -85,7 +85,6 @@ builder.Services.AddOpenTelemetry()
             .AddConsoleExporter();
     });
 
-
 // 🔹 DI (Application + Infrastructure)
 builder.Services.AddProcurementModule(builder.Configuration);
 
@@ -110,6 +109,9 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseHttpMetrics();
+app.UseMetricServer();
 
 app.MapControllers();
 
