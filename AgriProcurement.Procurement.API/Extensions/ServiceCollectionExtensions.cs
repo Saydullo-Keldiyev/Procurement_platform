@@ -41,7 +41,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IIdempotencyService, EfIdempotencyService>();
         services.AddScoped<ProcurementOrderSaga>();
         services.AddSingleton<OrderCreatedConsumer>();
-        services.AddHostedService<RabbitMqBackgroundService>();
+        //services.AddHostedService<RabbitMqBackgroundService>();
         services.AddScoped<ISagaEventPublisher, SagaEventPublisher>();
 
 
