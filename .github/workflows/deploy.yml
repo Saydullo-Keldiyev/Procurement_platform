@@ -1,0 +1,129 @@
+name: .NET 9 CI/CD (AgriProcurement)
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Select environment"
+        type: choice
+        required: true
+        options: [ dev, staging, prod ]
+        default: dev
+
+      deploy:
+        description: "Deploy after build?"
+        type: boolean
+        required: true
+        default: false
+
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: write
+  security-events: write
+
+jobs:
+  # -------------------------------------------------------
+  # 1️⃣ BUILD + TEST + DOCKER BUILD & PUSH
+  # -------------------------------------------------------
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # -------- .NET 9 --------
+      - name: Setup .NET 9
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
+
+      # -------- Docker login --------
+      - name: Login to Docker Hub
+        run: |
+          echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | \
+          docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+
+      # -------- Build & Push Procurement --------
+      - name: Build & Push Procurement API
+        run: |
+          docker build \
+            -t saydullox/procurement-api:${{ github.sha }} \
+            src/Modules/Procurement/AgriProcurement.Procurement.API
+          docker push saydullox/procurement-api:${{ github.sha }}
+
+      # -------- Build & Push Supplier --------
+      - name: Build & Push Supplier API
+        run: |
+          docker build \
+            -t saydullox/supplier-api:${{ github.sha }} \
+            src/Modules/Supplier/AgriProcurement.Supplier.API
+          docker push saydullox/supplier-apii:${{ github.sha }}
+
+      # -------- GitOps: Helm values update --------
+      - name: Update Helm image tags
+        if: ${{ github.event.inputs.deploy == 'true' || github.ref == 'refs/heads/main' }}
+        run: |
+          sed -i "s/tag:.*/tag: \"${{ github.sha }}\"/" deploy/helm/procurement-api/values.yaml
+          sed -i "s/tag:.*/tag: \"${{ github.sha }}\"/" deploy/helm/supplier-api/values.yaml
+
+      - name: Commit Helm changes
+        if: ${{ github.event.inputs.deploy == 'true' || github.ref == 'refs/heads/main' }}
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add deploy/helm
+          git commit -m "chore: update image tags to ${{ github.sha }}"
+          git push
+
+  # -------------------------------------------------------
+  # 2️⃣ TRIVY SECURITY SCAN
+  # -------------------------------------------------------
+  trivy-scan:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Build images for scan
+        run: |
+          docker build -t procurement-api:${{ github.sha }} src/Modules/Procurement/AgriProcurement.Procurement.API
+          docker build -t supplier-api:${{ github.sha }} src/Modules/Supplier/AgriProcurement.Supplier.API
+
+      - name: Trivy Scan (table)
+        uses: aquasecurity/trivy-action@0.20.0
+        with:
+          scan-type: image
+          image-ref: procurement-api:${{ github.sha }}
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
+          format: table
+
+      - name: Trivy Scan (SARIF)
+        uses: aquasecurity/trivy-action@0.20.0
+        with:
+          scan-type: image
+          image-ref: supplier-api:${{ github.sha }}
+          format: sarif
+          output: trivy-results.sarif
+
+      - name: Upload SARIF
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-results.sarif
