@@ -5,7 +5,7 @@ image:
   pullPolicy: IfNotPresent
 
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "2eba18cee40e42cdef7a608f470b6b034db86afe"
+  tag: "284c671d4c788c11b58f7698e9f958f1e2788f81"
 
 
 
