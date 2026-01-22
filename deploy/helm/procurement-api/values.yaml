@@ -8,6 +8,7 @@ image:
   tag: "2eba18cee40e42cdef7a608f470b6b034db86afe"
 
 
+
 service:
   type: ClusterIP
   port: 8080
@@ -22,21 +23,32 @@ rabbitmq:
   username: admin
   password: admin123
 
-livenessProbe:
-  httpGet:
-    path: /
-    port: 8080
-  initialDelaySeconds: 20
-  periodSeconds: 10
+ingress:
+  enabled: false
 
-readinessProbe:
-  httpGet:
-    path: /
-    port: 8080
-  initialDelaySeconds: 20
-  periodSeconds: 10
+
+# livenessProbe:
+#   httpGet:
+#     path: /
+#     port: 8080
+#   initialDelaySeconds: 20
+#   periodSeconds: 10
+
+# readinessProbe:
+#   httpGet:
+#     path: /
+#     port: 8080
+#   initialDelaySeconds: 20
+#   periodSeconds: 10
 
 initContainers:
 - name: wait-for-rabbitmq
   image: busybox
   command: ['sh', '-c', 'until nc -z rabbitmq 5672; do echo waiting; sleep 2; done;']
+
+# <<< Shu bo‘limni qo‘shish juda muhim
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
