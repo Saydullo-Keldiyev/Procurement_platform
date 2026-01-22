@@ -61,17 +61,21 @@ jobs:
       - name: Build & Push Procurement API
         run: |
           docker build \
+            -f src/Modules/Procurement/AgriProcurement.Procurement.API/Dockerfile \
             -t saydullox/procurement-api:${{ github.sha }} \
-            AgriProcurement.Procurement.API
+            .
           docker push saydullox/procurement-api:${{ github.sha }}
+
 
       # -------- Build & Push Supplier --------
       - name: Build & Push Supplier API
         run: |
           docker build \
+            -f src/Modules/Supplier/AgriProcurement.Supplier.API/Dockerfile \
             -t saydullox/supplier-api:${{ github.sha }} \
-            AgriProcurement.Supplier.API
-          docker push saydullox/supplier-apii:${{ github.sha }}
+            .
+          docker push saydullox/supplier-api:${{ github.sha }}
+
 
       # -------- GitOps: Helm values update --------
       - name: Update Helm image tags
