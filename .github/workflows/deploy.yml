@@ -61,7 +61,7 @@ jobs:
       - name: Build & Push Procurement API
         run: |
           docker build \
-            -f src/Modules/Procurement/AgriProcurement.Procurement.API/Dockerfile \
+            -f AgriProcurement.Procurement.API/Dockerfile \
             -t saydullox/procurement-api:${{ github.sha }} \
             .
           docker push saydullox/procurement-api:${{ github.sha }}
@@ -71,7 +71,7 @@ jobs:
       - name: Build & Push Supplier API
         run: |
           docker build \
-            -f src/Modules/Supplier/AgriProcurement.Supplier.API/Dockerfile \
+            -f AgriProcurement.Supplier.API/Dockerfile \
             -t saydullox/supplier-api:${{ github.sha }} \
             .
           docker push saydullox/supplier-api:${{ github.sha }}
