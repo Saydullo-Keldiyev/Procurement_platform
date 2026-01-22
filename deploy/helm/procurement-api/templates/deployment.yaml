@@ -32,46 +32,84 @@ spec:
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+
       containers:
         - name: {{ .Chart.Name }}
           {{- with .Values.securityContext }}
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+
+          # 🔴 MUHIM: API qaysi portda ishlashi
           ports:
             - name: http
-              containerPort: {{ .Values.service.port }}
+              containerPort: 8080
               protocol: TCP
-          {{- with .Values.livenessProbe }}
+
+          # 🔴 MUHIM: .NET va RabbitMQ konfiguratsiyasi
+          env:
+            # .NET API’ni 8080 da majburan ishga tushiramiz
+            - name: ASPNETCORE_URLS
+              value: http://+:8080
+
+            # RabbitMQ connection (AUTH MUAMMO HAL BO‘LADI)
+            - name: RabbitMq__Host
+              value: rabbitmq
+            - name: RabbitMq__Port
+              value: "5672"
+            - name: RabbitMq__Username
+              value: admin
+            - name: RabbitMq__Password
+              value: admin123
+
+          # ✅ LIVENESS PROBE
           livenessProbe:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- with .Values.readinessProbe }}
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+          # ✅ READINESS PROBE
           readinessProbe:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+
           {{- with .Values.resources }}
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+
           {{- with .Values.volumeMounts }}
           volumeMounts:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+
       {{- with .Values.volumes }}
       volumes:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+
       {{- with .Values.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
