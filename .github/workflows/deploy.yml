@@ -62,7 +62,7 @@ jobs:
         run: |
           docker build \
             -t saydullox/procurement-api:${{ github.sha }} \
-            src/Modules/Procurement/AgriProcurement.Procurement.API
+            AgriProcurement.Procurement.API
           docker push saydullox/procurement-api:${{ github.sha }}
 
       # -------- Build & Push Supplier --------
@@ -70,7 +70,7 @@ jobs:
         run: |
           docker build \
             -t saydullox/supplier-api:${{ github.sha }} \
-            src/Modules/Supplier/AgriProcurement.Supplier.API
+            AgriProcurement.Supplier.API
           docker push saydullox/supplier-apii:${{ github.sha }}
 
       # -------- GitOps: Helm values update --------
