@@ -88,8 +88,11 @@ builder.Services.AddOpenTelemetry()
 // 🔹 DI (Application + Infrastructure)
 builder.Services.AddProcurementModule(builder.Configuration);
 
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
 
+app.MapHealthChecks("/health");
 app.UseMiddleware<CorrelationIdMiddleware>();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
