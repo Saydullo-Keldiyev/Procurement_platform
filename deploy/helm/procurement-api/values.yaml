@@ -69,6 +69,8 @@ env:
     value: admin
   - name: RabbitMQ__Password
     value: admin123
+  - name: ConnectionStrings__Default
+    value: "Host=postgres-postgresql;Port=5432;Database=procurement;Username=agri;Password=agri123"
 
 metrics:
   enabled: true
