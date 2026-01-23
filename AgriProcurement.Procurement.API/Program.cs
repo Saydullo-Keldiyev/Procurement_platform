@@ -92,9 +92,10 @@ builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
-app.MapHealthChecks("/health");
 app.UseMiddleware<CorrelationIdMiddleware>();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+app.UseRouting();
 
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
@@ -116,6 +117,7 @@ app.UseAuthorization();
 app.UseHttpMetrics();
 app.UseMetricServer();
 
+app.MapHealthChecks("/health");
 app.MapControllers();
 
 app.Run();
