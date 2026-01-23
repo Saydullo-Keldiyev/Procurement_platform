@@ -54,10 +54,10 @@ public sealed class CreateOrderCommandHandler
         var domainEvent = order.Create();
 
         // 4️⃣ Persist aggregate
-        await _orderRepository.AddAsync(order, cancellationToken);
+        // await _orderRepository.AddAsync(order, cancellationToken);
 
-        // 5️⃣ Commit transaction
-        await _unitOfWork.CommitAsync(cancellationToken);
+        // // 5️⃣ Commit transaction
+        // await _unitOfWork.CommitAsync(cancellationToken);
 
         // 6️⃣ Publish domain event (OUTBOX orqali ketadi)
         await _eventPublisher.PublishAsync(domainEvent, cancellationToken);
@@ -66,6 +66,10 @@ public sealed class CreateOrderCommandHandler
         await _idempotencyService.MarkAsProcessedAsync(
             command.IdempotencyKey, cancellationToken);
 
-        return new CreateOrderResult(order.Id, order.Status.ToString());
+        // return new CreateOrderResult(order.Id, order.Status.ToString());
+        return new CreateOrderResult(
+            OrderId: Guid.NewGuid()
+);
+
     }
 }
