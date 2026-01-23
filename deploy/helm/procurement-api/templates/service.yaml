@@ -12,4 +12,5 @@ spec:
       protocol: TCP
       name: http
   selector:
-    {{- include "procurement-api.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/name: procurement-api
+    app.kubernetes.io/instance: agri
