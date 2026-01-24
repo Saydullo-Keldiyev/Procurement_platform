@@ -59,6 +59,17 @@ AgriProcurement/
 └── tests/                            # Test loyihalari
 ```
 
+## 🚀 Deployment Workflow
+
+1. **Application** Helm orqali package qilinadi
+2. **Helm charts** Git repository'da saqlanadi
+3. **ArgoCD** repository o'zgarishlarini kuzatadi
+4. **Kubernetes resources** avtomatik sinxronlanadi
+5. **Application pods** cluster'ga deploy qilinadi
+6. **Prometheus** /metrics endpoint'dan metrikalar to'playdi
+7. **Grafana** metrikalar va loglarni vizualizatsiya qiladi
+8. **Loki** Promtail orqali loglarni to'playdi
+
 ## 🚀 Loyihani Ishga Tushirish
 
 ### Talablar
@@ -106,7 +117,7 @@ dotnet run --project ApiGateway
 ### Prometheus Metrics
 ![Prometheus Monitoring](image-1.png)
 
-Tizim quyidagi metrikalarni to'playdi:
+**To'plangan Metrikalar:**
 - HTTP so'rovlar davomiyligi
 - So'rovlar soni status kodlari bo'yicha
 - CPU va xotira ishlatilishi
@@ -116,7 +127,7 @@ Tizim quyidagi metrikalarni to'playdi:
 ### Grafana Dashboard
 ![Grafana Dashboard](image-2.png)
 
-Grafana orqali quyidagi dashboardlar mavjud:
+**Dashboardlar:**
 - Kubernetes Cluster Overview
 - Application Metrics Dashboard
 - Node Exporter Metrics
@@ -124,7 +135,10 @@ Grafana orqali quyidagi dashboardlar mavjud:
 ### Loki Logging
 ![Loki Logging](image-3.png)
 
-Barcha application loglar Loki orqali to'planadi va Grafana'da ko'rsatiladi:
+**Logging xususiyatlari:**
+- Barcha application podlardan loglar to'planadi
+- Loki orqali markazlashtirilgan log saqlash
+- Grafana'da loglarni vizualizatsiya
 - Namespace bo'yicha filtrlash
 - Pod va container bo'yicha filtrlash
 - Log level bo'yicha qidirish (INFO/WARN/ERROR)
@@ -134,23 +148,18 @@ Barcha application loglar Loki orqali to'planadi va Grafana'da ko'rsatiladi:
 ### ArgoCD
 ![ArgoCD GitOps](image-4.png)
 
-ArgoCD quyidagi vazifalarni bajaradi:
+**ArgoCD vazifalari:**
 - Git va cluster o'rtasida doimiy sinxronizatsiya
 - Deklarativ Kubernetes deploymentlar
 - Drift detection va self-healing
 - Git history orqali rollback
 
+**Asosiy afzalliklar:**
+- Yagona haqiqat manbai (Git)
+- Avtomatik deploymentlar
+- Xavfsiz va audit qilinadigan o'zgarishlar
+
 ![ArgoCD Applications](image-5.png)
-
-### Deployment Workflow
-
-1. **Kod o'zgarishi** Git repository'ga push qilinadi
-2. **Helm chart** yangilanadi
-3. **ArgoCD** o'zgarishlarni aniqlaydi
-4. **Kubernetes resources** avtomatik yangilanadi
-5. **Application pods** cluster'ga deploy qilinadi
-6. **Prometheus** /metrics endpoint'dan metrikalar to'playdi
-7. **Grafana** metrikalar va loglarni vizualizatsiya qiladi
 
 ## 🏛️ Arxitektura Tamoyillari
 
