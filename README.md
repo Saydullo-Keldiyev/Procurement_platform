@@ -1,106 +1,106 @@
-# 🌾 AgriProcurement Platform - Qishloq Xo'jaligi Xaridlari Tizimi
+# 🌾 AgriProcurement Platform - Agricultural Procurement System
 
-## 📌 Loyiha Haqida
+## 📌 Project Overview
 
-AgriProcurement - bu qishloq xo'jaligi mahsulotlarini xarid qilish uchun mo'ljallangan zamonaviy mikroservis arxitekturasiga asoslangan platforma. Loyiha Clean Architecture tamoyillariga amal qilgan holda .NET 9 va ASP.NET Core yordamida ishlab chiqilgan.
+AgriProcurement is a modern microservices-based platform designed for agricultural product procurement. The project is built using .NET 9 and ASP.NET Core following Clean Architecture principles.
 
-## 🏗️ Tizim Arxitekturasi
+## 🏗️ System Architecture
 
-![Tizim Arxitekturasi](image.png)
+![System Architecture](image.png)
 
-Tizim quyidagi asosiy komponentlardan iborat:
-- **API Gateway** - barcha so'rovlarni marshrutlash
-- **Procurement Service** - xaridlar boshqaruvi
-- **Supplier Service** - yetkazib beruvchilar boshqaruvi
-- **RabbitMQ** - asinxron xabarlar almashish
-- **PostgreSQL** - ma'lumotlar bazasi
+The system consists of the following core components:
+- **API Gateway** - Routes all requests
+- **Procurement Service** - Manages procurement operations
+- **Supplier Service** - Manages supplier operations
+- **RabbitMQ** - Asynchronous message exchange
+- **PostgreSQL** - Database
 
-## 🛠️ Texnologiyalar
+## 🛠️ Technology Stack
 
 ### Backend
-- **.NET 9** - asosiy framework
-- **ASP.NET Core** - web API
+- **.NET 9** - Core framework
+- **ASP.NET Core** - Web API
 - **Entity Framework Core** - ORM
 - **MediatR** - CQRS pattern
-- **RabbitMQ** - message broker
-- **PostgreSQL** - ma'lumotlar bazasi
-- **Serilog** - logging
-- **OpenTelemetry** - monitoring
-- **Prometheus** - metrics collection
+- **RabbitMQ** - Message broker
+- **PostgreSQL** - Database
+- **Serilog** - Logging
+- **OpenTelemetry** - Monitoring
+- **Prometheus** - Metrics collection
 
-### DevOps va Infrastructure
-- **Docker** - konteynerizatsiya
-- **Kubernetes** - orkestrlash
+### DevOps & Infrastructure
+- **Docker** - Containerization
+- **Kubernetes** - Orchestration
 - **Helm** - Kubernetes package manager
 - **ArgoCD** - GitOps deployment
-- **Grafana** - monitoring dashboard
-- **Loki** - log aggregation
+- **Grafana** - Monitoring dashboard
+- **Loki** - Log aggregation
 
-## 📁 Loyiha Tuzilishi
+## 📁 Project Structure
 
 ```
 AgriProcurement/
 ├── src/
 │   ├── ApiGateway/                    # API Gateway
-│   ├── BuildingBlocks/                # Umumiy kutubxonalar
+│   ├── BuildingBlocks/                # Shared libraries
 │   └── Modules/
-│       ├── Procurement/               # Xaridlar moduli
+│       ├── Procurement/               # Procurement module
 │       │   ├── Domain/               # Domain layer
 │       │   ├── Application/          # Application layer
 │       │   ├── Infrastructure/       # Infrastructure layer
 │       │   └── API/                  # Presentation layer
-│       └── Supplier/                  # Yetkazib beruvchilar moduli
+│       └── Supplier/                  # Supplier module
 │           ├── Domain/
 │           ├── Application/
 │           ├── Infrastructure/
 │           └── API/
 ├── deploy/
 │   └── helm/                         # Helm charts
-└── tests/                            # Test loyihalari
+└── tests/                            # Test projects
 ```
 
 ## 🚀 Deployment Workflow
 
-1. **Application** Helm orqali package qilinadi
-2. **Helm charts** Git repository'da saqlanadi
-3. **ArgoCD** repository o'zgarishlarini kuzatadi
-4. **Kubernetes resources** avtomatik sinxronlanadi
-5. **Application pods** cluster'ga deploy qilinadi
-6. **Prometheus** /metrics endpoint'dan metrikalar to'playdi
-7. **Grafana** metrikalar va loglarni vizualizatsiya qiladi
-8. **Loki** Promtail orqali loglarni to'playdi
+1. **Application** is packaged using Helm
+2. **Helm charts** are stored in Git repository
+3. **ArgoCD** watches the repository for changes
+4. **Kubernetes resources** are synced automatically
+5. **Application pods** are deployed to the cluster
+6. **Prometheus** scrapes metrics from /metrics endpoint
+7. **Grafana** visualizes metrics and logs
+8. **Loki** collects logs via Promtail
 
-## 🚀 Loyihani Ishga Tushirish
+## 🚀 Getting Started
 
-### Talablar
+### Prerequisites
 - .NET 9 SDK
 - Docker Desktop
 - PostgreSQL
 - RabbitMQ
 
-### Lokal Ishga Tushirish
+### Local Development Setup
 
-1. **Repository ni klonlash:**
+1. **Clone the repository:**
 ```bash
 git clone <repository-url>
 cd AgriProcurement
 ```
 
-2. **Ma'lumotlar bazasini sozlash:**
+2. **Setup database:**
 ```bash
-# PostgreSQL ishga tushirish
+# Start PostgreSQL
 docker run --name postgres -e POSTGRES_PASSWORD=password -p 5432:5432 -d postgres
 
-# Migration qo'llash
+# Apply migrations
 dotnet ef database update --project AgriProcurement.Procurement.Infrastructure
 ```
 
-3. **RabbitMQ ishga tushirish:**
+3. **Start RabbitMQ:**
 ```bash
 docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management
 ```
 
-4. **Loyihani ishga tushirish:**
+4. **Run the applications:**
 ```bash
 # Procurement API
 dotnet run --project AgriProcurement.Procurement.API
@@ -112,22 +112,22 @@ dotnet run --project AgriProcurement.Supplier.API
 dotnet run --project ApiGateway
 ```
 
-## 📊 Monitoring va Logging
+## 📊 Monitoring & Logging
 
 ### Prometheus Metrics
 ![Prometheus Monitoring](image-1.png)
 
-**To'plangan Metrikalar:**
-- HTTP so'rovlar davomiyligi
-- So'rovlar soni status kodlari bo'yicha
-- CPU va xotira ishlatilishi
-- .NET GC metrikalari
+**Collected Metrics:**
+- HTTP request duration
+- Request count by status code
+- CPU and memory usage
+- .NET GC metrics
 - Thread count
 
 ### Grafana Dashboard
 ![Grafana Dashboard](image-2.png)
 
-**Dashboardlar:**
+**Available Dashboards:**
 - Kubernetes Cluster Overview
 - Application Metrics Dashboard
 - Node Exporter Metrics
@@ -135,73 +135,73 @@ dotnet run --project ApiGateway
 ### Loki Logging
 ![Loki Logging](image-3.png)
 
-**Logging xususiyatlari:**
-- Barcha application podlardan loglar to'planadi
-- Loki orqali markazlashtirilgan log saqlash
-- Grafana'da loglarni vizualizatsiya
-- Namespace bo'yicha filtrlash
-- Pod va container bo'yicha filtrlash
-- Log level bo'yicha qidirish (INFO/WARN/ERROR)
+**Logging Features:**
+- Logs collected from all application pods
+- Centralized log storage using Loki
+- Log visualization in Grafana
+- Namespace filtering
+- Pod and container filtering
+- Log level search (INFO/WARN/ERROR)
 
-## 🔄 GitOps va Deployment
+## 🔄 GitOps & Deployment
 
 ### ArgoCD
 ![ArgoCD GitOps](image-4.png)
 
-**ArgoCD vazifalari:**
-- Git va cluster o'rtasida doimiy sinxronizatsiya
-- Deklarativ Kubernetes deploymentlar
-- Drift detection va self-healing
-- Git history orqali rollback
+**ArgoCD Responsibilities:**
+- Continuous synchronization between Git and cluster
+- Declarative Kubernetes deployments
+- Drift detection and self-healing
+- Rollback using Git history
 
-**Asosiy afzalliklar:**
-- Yagona haqiqat manbai (Git)
-- Avtomatik deploymentlar
-- Xavfsiz va audit qilinadigan o'zgarishlar
+**Key Benefits:**
+- Single source of truth (Git)
+- Automated deployments
+- Safe and auditable changes
 
 ![ArgoCD Applications](image-5.png)
 
-## 🏛️ Arxitektura Tamoyillari
+## 🏛️ Architecture Principles
 
 ### Clean Architecture
-- **Domain Layer**: Business logic va entities
-- **Application Layer**: Use cases va CQRS commands/queries
-- **Infrastructure Layer**: Ma'lumotlar bazasi, messaging, external services
-- **Presentation Layer**: API controllers va DTOs
+- **Domain Layer**: Business logic and entities
+- **Application Layer**: Use cases and CQRS commands/queries
+- **Infrastructure Layer**: Database, messaging, external services
+- **Presentation Layer**: API controllers and DTOs
 
 ### Design Patterns
 - **CQRS** - Command Query Responsibility Segregation
-- **Mediator Pattern** - MediatR orqali
-- **Repository Pattern** - Ma'lumotlar bazasi abstraction
+- **Mediator Pattern** - Via MediatR
+- **Repository Pattern** - Database abstraction
 - **Unit of Work** - Transaction management
 - **Domain Events** - Domain-driven design
 - **Saga Pattern** - Distributed transactions
 
-## 🔧 Xususiyatlar
+## 🔧 Features
 
 ### Procurement Service
-- Xarid buyurtmalarini yaratish va boshqarish
+- Create and manage procurement orders
 - Idempotency support
 - Rate limiting
 - Correlation ID tracking
 - Domain events
 
 ### Supplier Service
-- Yetkazib beruvchilar ma'lumotlarini boshqarish
+- Manage supplier information
 - Supplier reservation
 - Event-driven communication
 
 ### Cross-cutting Concerns
 - **Exception Handling** - Global exception middleware
 - **Logging** - Structured logging with Serilog
-- **Monitoring** - OpenTelemetry va Prometheus
+- **Monitoring** - OpenTelemetry and Prometheus
 - **Health Checks** - Application health monitoring
 - **Rate Limiting** - API rate limiting
 - **Correlation ID** - Request tracking
 
 ## 🧪 Testing
 
-Loyihada quyidagi test turlari qo'llaniladi:
+The project includes the following test types:
 - Unit Tests
 - Integration Tests
 - API Tests
@@ -209,57 +209,57 @@ Loyihada quyidagi test turlari qo'llaniladi:
 
 ## 📚 API Documentation
 
-Swagger UI orqali API documentation mavjud:
+Swagger UI provides API documentation:
 - Development: `http://localhost:5000`
 - Swagger JSON: `http://localhost:5000/swagger/v1/swagger.json`
 
-## 🔐 Xavfsizlik
+## 🔐 Security
 
-- **Idempotency Keys** - POST so'rovlar uchun
+- **Idempotency Keys** - For POST requests
 - **Rate Limiting** - API abuse prevention
-- **Input Validation** - Ma'lumotlar validatsiyasi
-- **Exception Handling** - Xavfsiz error handling
+- **Input Validation** - Data validation
+- **Exception Handling** - Secure error handling
 
 ## 🚀 Production Deployment
 
 ### Kubernetes
 ```bash
-# Helm chart o'rnatish
+# Install Helm charts
 helm install procurement-api ./deploy/helm/procurement-api
 helm install supplier-api ./deploy/helm/supplier-api
 ```
 
 ### Docker
 ```bash
-# Image build qilish
+# Build image
 docker build -t agriprocurement-api .
 
-# Container ishga tushirish
+# Run container
 docker run -p 8080:80 agriprocurement-api
 ```
 
-## 🤝 Hissa Qo'shish
+## 🤝 Contributing
 
-1. Repository'ni fork qiling
-2. Feature branch yarating (`git checkout -b feature/AmazingFeature`)
-3. O'zgarishlarni commit qiling (`git commit -m 'Add some AmazingFeature'`)
-4. Branch'ni push qiling (`git push origin feature/AmazingFeature`)
-5. Pull Request oching
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-## 📄 Litsenziya
+## 📄 License
 
-Bu loyiha MIT litsenziyasi ostida tarqatiladi. Batafsil ma'lumot uchun `LICENSE` faylini ko'ring.
+This project is distributed under the MIT License. See `LICENSE` file for more information.
 
-## 👨‍💻 Muallif
+## 👨‍💻 Author
 
 **DevOps Engineer**
-- Kubernetes, GitOps, Monitoring, Cloud-Native Infrastructure bo'yicha mutaxassis
-- Zamonaviy DevOps amaliyotlari va vositalarini namoyish etish maqsadida yaratilgan
+- Specialist in Kubernetes, GitOps, Monitoring, Cloud-Native Infrastructure
+- Created to demonstrate modern DevOps practices and tooling
 
-## 📞 Aloqa
+## 📞 Contact
 
-Savollar yoki takliflar uchun issue yarating yoki pull request yuboring.
+For questions or suggestions, please create an issue or submit a pull request.
 
 ---
 
-**Eslatma:** Bu loyiha ta'lim va namoyish maqsadlarida yaratilgan bo'lib, real dunyo DevOps amaliyotlari va vositalarini ko'rsatadi.
+**Note:** This project is created for educational and demonstration purposes, showcasing real-world DevOps practices and tooling.
