@@ -6,7 +6,10 @@ The focus of this project is deployment automation, GitOps, monitoring, and logg
 
 The application itself is a .NET 9 ASP.NET Core API, deployed and managed entirely through Kubernetes and GitOps practices.
 🧱 System Architecture
+
+
 <img width="516" height="373" alt="image" src="https://github.com/user-attachments/assets/9a45a4f4-32b6-4085-87f2-83b869d57888" />
+
 
 ⚙️ Technology Stack & Versions
 🔹 Application
